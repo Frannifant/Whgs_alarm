@@ -5,7 +5,22 @@
   "sites": [
     {
       "name": "Wentzel Dr.",
+      "url": "https://wentzel-dr.de/immobilien/",
+      "extra_urls": [
+        "https://wentzel-dr.de/immobilien/2/",
+        "https://wentzel-dr.de/immobilien/3/"
+      ],
+      "require": "Hamburg",
+      "exclude": "Leipzig|Dresden|Potsdam|Düsseldorf|Hannover|Berlin|Köln|Bremen"
+    },
+
+ {
+      "name": "Wentzel Dr.II",
       "url": "https://wentzel-dr.de/immobilien?frymo_query=%7B%2268389%22:%7B%22search_string%22:%22hamburg%22,%22s_fields%22:%22title,external_id,zip_code,location,internal_id%22,%22marketing_type%22:%22218%22,%22price_to%22:%22800%22%7D%7D"
+    },
+    {
+      "name": "KAIFU-NORDLAND",
+      "url": "https://www.kaifu.de/wohnen/mietangebote/"
     },
     {
       "name": "KAIFU-NORDLAND",
@@ -22,7 +37,7 @@
     },
     {
       "name": "Rebien",
-      "url": "https://www.wobau-rebien.de/aktuelle-angebote.html",
+      "url": "https://www.wobau-rebien.de/",
       "js": true
     },
     {
@@ -47,15 +62,15 @@
     },
     {
       "name": "Groth & Schneider",
-      "url": "https://www.grothschneider.de/aktuelle-angebote/?typ%5B%5D=Wohnung&art%5B%5D=Miete"
+      "url": "https://www.grothschneider.de/aktuelle-angebote/"
     },
     {
       "name": "Treuhand Hantke",
-      "url": "https://treuhand-hantke.com/?offertype=vermietung&proptype=&location=hamburg&size=&price=&rooms="
+      "url": "https://treuhand-hantke.com/"
     },
     {
       "name": "altoba",
-      "url": "https://2222820.hpm.immosolve.eu/?startRoute=result-list&objectIdentifier=2#!/result-list-2",
+      "url": "https://altoba.de/wohnen/",
       "js": true
     },
     {
@@ -66,12 +81,11 @@
     {
       "name": "Heimstaden Hamburg",
       "url": "https://heimstaden.com/de/immobiliensuche/wohnung-hamburg/",
-      "require": "Hamburg",
-      "exclude": "Leipzig|Dresden|Potsdam|Düsseldorf|Hannover|Berlin|Köln|Bremen"
+      "js": true
     },
     {
       "name": "Behrendt",
-      "url": "https://behrendt.hamburg/wohnung-mieten/"
+      "url": "https://behrendt.hamburg/kontakt/vermietung/"
     },
     {
       "name": "PrivatBau",
@@ -79,11 +93,60 @@
     },
     {
       "name": "Theo Urbach",
-      "url": "https://www.wtu.de/immobilien.html#/home"
+      "url": "https://www.wtu.de/"
     },
     {
       "name": "Emil Planton",
       "url": "https://www.emil-planton.de/"
+    },
+    {
+      "name": "Otto Wulff",
+      "url": "https://immobilienmanagement.otto-wulff.de/",
+      "js": true
+    },
+    {
+      "name": "Hanseatische (HBH)",
+      "url": "https://www.hanseatische.de/de/wohnungsangebote",
+      "apply_url": "https://www.hanseatische.de/de/wohnungsinteresse"
+    },
+    {
+      "name": "Robert Vogel",
+      "url": "https://robertvogel.de/wohnen/",
+      "apply_url": "mailto:wohnen@robertvogel.de"
+    },
+    {
+      "name": "BUWOG",
+      "url": "https://www.buwog-immobilientreuhand.de/immobilien?property_search[result_count_only]=true&property_search[marketing_type]=rent&property_search[property_type]=flat&property_search[minimum_total_size]=10&property_search[maximum_total_size]=50&property_search[minimum_rent_price]=291&property_search[maximum_rent_price]=791&property_search[zip_code]=22045,20099,22525,22523,20359,21035,22083,22117,22119,22303,22767"
+    },
+    {
+      "name": "Hamburg Team",
+      "url": "https://hamburgteam.de/property-management/mietangebote/",
+      "exclude": "\\b(Leipzig|Dresden|Berlin|Köln|München|Frankfurt|Düsseldorf|Hannover|Stuttgart|Potsdam)\\b"
+    },
+    {
+      "name": "Berlinhaus",
+      "url": "https://www.berlinhaus.com/mietangebote?frymo_query=%7B%22test%22:%7B%22location%22:%22713%22,%22price_to%22:%22800%22,%22type%22:%22wohnung%22%7D%7D",
+      "js": true
+    },
+    {
+      "name": "Grossmann & Berger",
+      "url": "https://www.grossmann-berger.de/wohnen/immobiliensuche/sort:distanz/dir:asc/vermarktungsart:mieten/immobilienart:wohnung/adresse:Hamburg/umkreis:50/preisbis:800",
+      "exclude": "\\b(Leipzig|Dresden|Berlin|Köln|München|Frankfurt|Düsseldorf|Hannover|Stuttgart|Potsdam)\\b"
+    },
+    {
+      "name": "Vonovia",
+      "url": "https://www.vonovia.de/zuhause-finden/immobilien?rentType=miete&city=Hamburg&lift=0&parking=0&cellar=0&latitude=53.548828199999996&longitude=9.987170299999999&perimeter=15&immoType=wohnung&priceMax=800&sizeMax=60&minRooms=Beliebig&floor=Beliebig&bathtub=0&bathwindow=0&bathshower=0&furnished=0&kitchenEBK=0&toiletSeparate=0&disabilityAccess=egal&seniorFriendly=0&balcony=egal&garden=0&parkingCarport=0&parkingStellplatz=0&parkingGarage=0&parkingTiefgarage=0&subsidizedHousingPermit=egal&locationDisplay=Hamburg&scroll=true",
+      "js": true
+    },
+    {
+      "name": "Schneider Immo",
+      "url": "https://www.schneiderimmo.de/mietwohnungen",
+      "exclude": "\\b(Leipzig|Dresden|Berlin|Köln|München|Frankfurt|Düsseldorf|Hannover|Stuttgart|Potsdam)\\b"
+    },
+    {
+      "name": "ohne-makler.net",
+      "url": "https://www.ohne-makler.net/immobilien/wohnung-mieten/hamburg/hamburg/?area_max=64&price_max=722&sort=date_desc",
+      "js": true
     }
   ]
 }
