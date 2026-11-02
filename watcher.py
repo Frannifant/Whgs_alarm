@@ -7,7 +7,8 @@ import hashlib
 import json
 import os
 import re
-from datetime import datetime
+from collections import Counter
+from datetime import datetime, timedelta
 from urllib.parse import urljoin
 from zoneinfo import ZoneInfo
 
@@ -155,6 +156,170 @@ def verdict(text):
 
 
 # ---------- Hauptlauf ----------
+# ---------- Bewerbungslink, leere Seiten, Tagesbericht ----------
+EMPTY_MARKER = re.compile(
+    r"(keine\s+(freien\s+)?(wohnungen|angebote|mietangebote|objekte|immobilien)|zurzeit\s+keine|"
+    r"derzeit\s+keine|aktuell\s+keine|0\s+ergebnisse|keine\s+(treffer|ergebnisse))", re.I)
+APPLY_LABEL = re.compile(r"bewerb", re.I)
+CONTACT_LABEL = re.compile(r"(anfrage|besichtigung|interesse|kontakt aufnehmen|anmieten|termin)", re.I)
+
+
+def find_apply(url, site):
+    """Sucht auf der Anzeigenseite den Bewerbungslink.
+    Rückgabe: ('link', url) | ('mail', adresse) | (None, None).
+    Reihenfolge: apply_url aus sites.json > Immomio-Link > Button 'bewerben' > Anfrage/Besichtigung > E-Mail."""
+    if site.get("apply_url"):
+        a = site["apply_url"]
+        return ("mail", a[7:]) if a.startswith("mailto:") else ("link", a)
+    try:
+        html = fetch({**site, "url": url})
+    except Exception as e:
+        print("Bewerbungslink-Suche fehlgeschlagen:", e)
+        return (None, None)
+    soup = BeautifulSoup(html, "html.parser")
+    immomio = bewerb = kontakt = mail = None
+    for a in soup.find_all("a", href=True):
+        href = a["href"].strip()
+        if href.startswith("mailto:"):
+            mail = mail or href[7:].split("?")[0]
+            continue
+        if href.startswith(("tel:", "javascript:", "#")):
+            continue
+        full = urljoin(url, href)
+        label = a.get_text(" ", strip=True)
+        if "immomio" in full.lower():
+            immomio = immomio or full
+        elif APPLY_LABEL.search(label):
+            bewerb = bewerb or full
+        elif CONTACT_LABEL.search(label):
+            kontakt = kontakt or full
+    best = immomio or bewerb or kontakt
+    if best:
+        return ("link", best)
+    if mail:
+        return ("mail", mail)
+    return (None, None)
+
+
+def apply_line(kind, value, listing_url):
+    if kind == "link" and value != listing_url:
+        return f"📝 Hier bewerben: {value}"
+    if kind == "mail":
+        return f"✉️ Bewerbung per E-Mail: {value}"
+    return "📝 Bewerben: über die Anzeige (Link oben), Bewerbungslink nicht erkannt"
+
+
+def site_groups(state):
+    stats = state.get("site_stats", {})
+    return {k: [n for n, s in stats.items() if s["status"] == k] for k in ("ok", "empty_ok", "empty", "error")}
+
+
+def recent_events(state, now, hours):
+    cut = now - timedelta(hours=hours)
+    return [e for e in state.get("events", []) if datetime.fromisoformat(e[0]) >= cut]
+
+
+def summary_lines(state, now):
+    g = site_groups(state)
+    total = sum(len(v) for v in g.values())
+    e24 = recent_events(state, now, 24)
+    reported = sum(e[2] for e in e24)
+    lines = [
+        f"Geprüft: {total} Seiten",
+        f"✅ {len(g['ok'])} mit Anzeigen · 💤 {len(g['empty_ok'])} leer laut Seite · "
+        f"⚠️ {len(g['empty'])} nichts erkannt · ❌ {len(g['error'])} Fehler",
+        f"Letzte 24 h: {len(e24)} neue Anzeigen erkannt, {reported} gemeldet.",
+    ]
+    if reported == 0:
+        extra = f" {len(e24)} neue Anzeigen passten nicht (zu teuer, zu groß, anderer Ort)." if e24 else ""
+        lines.append("Keine neue passende Wohnung in den letzten 24 h." + extra)
+    if g["empty"]:
+        lines.append("⚠️ Nichts erkannt (Seite leer oder nicht lesbar): " + ", ".join(g["empty"]))
+    if g["error"]:
+        lines.append("❌ Nicht erreichbar: " + ", ".join(g["error"]))
+    return lines
+
+
+# ---------- Prüfbefehle (/status, /test, /hilfe) ----------
+SELFTEST = [
+    ("2 Zimmer · 48 m² · 690 € Kaltmiete", True),
+    ("2 Zimmer · 55 m² · 820 € warm", True),
+    ("2 Zimmer · 55 m² · 1.050 € warm", False),
+    ("4 Zimmer · 90 m² · 1.200 € warm", False),
+    ("Einfamilienhaus 120 m² Kaufpreis 499.000 €", False),
+]
+
+
+def poll_commands(state):
+    """Liest neue Telegram-Nachrichten (nur von deiner Chat-ID) und gibt die Befehle zurück."""
+    if not TOKEN or not CHAT_ID:
+        return []
+    try:
+        r = requests.get(
+            f"https://api.telegram.org/bot{TOKEN}/getUpdates",
+            params={"offset": state.get("tg_offset", 0), "timeout": 0},
+            timeout=20,
+        ).json()
+    except Exception as e:
+        print("getUpdates-Fehler:", e)
+        return []
+    cmds = []
+    for u in r.get("result", []):
+        state["tg_offset"] = u["update_id"] + 1
+        m = u.get("message") or {}
+        if str(m.get("chat", {}).get("id")) != str(CHAT_ID):
+            continue
+        t = (m.get("text") or "").strip().lower()
+        if t.startswith("/"):
+            cmds.append(t.split()[0].split("@")[0])
+    return cmds
+
+
+def selftest():
+    lines, good = [], 0
+    for text, expected in SELFTEST:
+        got, _ = verdict(text)
+        ok = got == expected
+        good += ok
+        lines.append(("✅ " if ok else "❌ ") + f"{text} → {'melden' if got else 'ignorieren'}")
+    return good, len(SELFTEST), lines
+
+
+def build_status(state, now):
+    e7 = recent_events(state, now, 24 * 7)
+    lines = [f"📊 Status {now:%d.%m. %H:%M}",
+             "Der Bot läuft – dieser Lauf hat gerade alle Seiten geprüft.",
+             f"Aktiv seit: {state.get('since', 'unbekannt')}"]
+    lines += summary_lines(state, now)
+    lines.append(f"Letzte 7 Tage: {len(e7)} erkannt, {sum(e[2] for e in e7)} gemeldet")
+    top = Counter(e[1] for e in e7).most_common(5)
+    if top:
+        lines.append("Aktivste Seiten (7 Tage): " + ", ".join(f"{n} {c}" for n, c in top))
+    la = state.get("last_alert")
+    if la:
+        lines.append(f"Letzte Meldung an dich: {datetime.fromisoformat(la['t']):%d.%m. %H:%M} ({la['site']})")
+    else:
+        lines.append("Letzte Meldung an dich: noch keine")
+    return "\n".join(lines)
+
+
+def answer_commands(cmds, state, now):
+    for c in dict.fromkeys(cmds):  # jeden Befehl nur einmal beantworten
+        if c == "/status":
+            tg(build_status(state, now))
+        elif c == "/test":
+            good, total, lines = selftest()
+            tg("🧪 Test: So sähe eine echte Meldung aus:\n\n🏠 NEU bei Beispiel-Hausverwaltung\n"
+               "690 € kalt (warm geschätzt +150 €)\nHinweise: EG?\n\n"
+               "Helle 2-Zimmer-Wohnung, 48 m², Eimsbüttel\n\n👉 https://example.org/\n\n"
+               f"Filter-Selbsttest: {good}/{total} korrekt\n" + "\n".join(lines))
+        elif c in ("/hilfe", "/help", "/start"):
+            tg("Befehle:\n/status – Gesundheitscheck mit Zahlen der letzten 24 h und 7 Tage\n"
+               "/test – Probemeldung plus Filter-Selbsttest\n\n"
+               "Antwort kommt beim nächsten Lauf (bis ca. 15 Min.). "
+               "Sofort: GitHub → Actions → Run workflow.")
+
+
 def main():
     state = json.load(open(STATE_FILE, encoding="utf-8")) if os.path.exists(STATE_FILE) else {}
     seen = state.setdefault("seen", {})
@@ -162,16 +327,25 @@ def main():
     first_run = not seen
     status = []
     hits = 0
+    now = datetime.now(TZ)
+    state.setdefault("since", f"{now:%d.%m.%Y}")
+    cmds = poll_commands(state)
+    events = state.setdefault("events", [])
+    site_stats = state.setdefault("site_stats", {})
 
     for site in CFG["sites"]:
         name = site["name"]
         try:
-            listings = {}
+            listings, saw_empty_msg = {}, False
             for u in [site["url"]] + site.get("extra_urls", []):
-                listings.update(extract_listings(fetch({**site, "url": u}), u))
+                html = fetch({**site, "url": u})
+                listings.update(extract_listings(html, u))
+                if EMPTY_MARKER.search(html):
+                    saw_empty_msg = True
             errors[name] = 0
         except Exception as e:
             errors[name] = errors.get(name, 0) + 1
+            site_stats[name] = {"count": site_stats.get(name, {}).get("count", 0), "status": "error"}
             status.append(f"❌ {name}: Fehler ({type(e).__name__})")
             if errors[name] == 3:
                 tg(f"❌ {name} ist seit 3 Läufen nicht erreichbar.\n{site['url']}")
@@ -179,7 +353,14 @@ def main():
 
         known = set(seen.get(name, []))
         new_keys = [k for k in listings if k not in known]
-        status.append(("✅" if listings else "⚠️") + f" {name}: {len(listings)} Anzeigen erkannt")
+        if listings:
+            state_name, icon = "ok", "✅"
+        elif saw_empty_msg:
+            state_name, icon = "empty_ok", "💤"
+        else:
+            state_name, icon = "empty", "⚠️"
+        status.append(f"{icon} {name}: {len(listings)} Anzeigen erkannt")
+        site_stats[name] = {"count": len(listings), "status": state_name}
 
         sig = hashlib.md5(json.dumps([site["url"]] + site.get("extra_urls", [])).encode()).hexdigest()
         sigs = state.setdefault("sig", {})
@@ -196,34 +377,34 @@ def main():
                 if exc and exc.search(item["text"]):
                     continue
                 ok, price = verdict(item["text"])
+                events.append([now.isoformat(timespec="seconds"), name, 1 if ok else 0])
                 if not ok:
                     continue
                 tags = [label for rx, label in TAGS if rx.search(item["text"])]
+                kind, value = find_apply(item["url"], site)
                 msg = (f"🏠 NEU bei {name}\n{price}"
                        + (f"\nHinweise: {', '.join(tags)}" if tags else "")
-                       + f"\n\n{item['text'][:350]}\n\n👉 {item['url']}")
+                       + f"\n\n{item['text'][:350]}\n\n🔎 Anzeige: {item['url']}\n"
+                       + apply_line(kind, value, item["url"]))
                 tg(msg)
                 hits += 1
+                state["last_alert"] = {"t": now.isoformat(timespec="seconds"), "site": name}
 
         seen[name] = list(known | set(listings))[-500:]
 
-    now = datetime.now(TZ)
+    cut = now - timedelta(days=7)
+    state["events"] = [e for e in events if datetime.fromisoformat(e[0]) >= cut][-2000:]
     today = now.strftime("%Y-%m-%d")
     if first_run:
-        tg("🤖 Wohnungs-Alarm gestartet. Bestehende Anzeigen gespeichert – ab jetzt melde ich nur NEUE.\n\n" + "\n".join(status))
-    elif state.get("last_status_day") != today and now.hour >= 7:
-        ok = [s for s in status if s.startswith("✅")]
-        problems = [s for s in status if s.startswith("❌")]
-        empty = [s.split(":")[0][2:].strip() for s in status if s.startswith("⚠️")]
-        msg = f"☀️ Tagesstatus ({now:%d.%m.}): {len(ok)} von {len(status)} Seiten liefern Anzeigen."
-        if empty:
-            msg += "\nOhne Anzeigen: " + ", ".join(empty)
-        if problems:
-            msg += "\n" + "\n".join(problems)
-        tg(msg)
-    if now.hour >= 7:
+        tg("🤖 Wohnungs-Alarm gestartet. Bestehende Anzeigen gespeichert – ab jetzt melde ich nur NEUE.\n\n"
+           + "\n".join(status))
+        state["last_status_day"] = today
+    elif state.get("last_status_day") != today and now.hour >= 8:
+        # Täglicher Kontrolllauf: kommt jeden Morgen, auch wenn es nichts Neues gibt.
+        tg(f"☀️ Kontrolllauf {now:%d.%m.}: Der Bot läuft.\n" + "\n".join(summary_lines(state, now)))
         state["last_status_day"] = today
 
+    answer_commands(cmds, state, now)
     json.dump(state, open(STATE_FILE, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(f"Fertig. Treffer gemeldet: {hits}")
 
