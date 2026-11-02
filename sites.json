@@ -1,0 +1,19 @@
+{
+  "max_warm": 850,
+  "max_kalt_if_only_kalt": 700,
+  "max_rooms": 2.5,
+  "sites": [
+    {"name": "Wentzel Dr.", "url": "https://wentzel-dr.de/immobilien/?post_type=immomakler_object&vermarktungsart=miete&nutzungsart=wohnen&ort=hamburg&radius=25&collapse=in&von-qm=0.00&bis-qm=390.00&von-zimmer=1.00&bis-zimmer=2.50&von-kaltmiete=0.00&bis-kaltmiete=750.00&von-kaufpreis=0.00&bis-kaufpreis=1400000.00"},
+    {"name": "KAIFU-NORDLAND", "url": "https://www.kaifu.de/wohnen/mieten", "js": true},
+    {"name": "Siemers Grundbesitz", "url": "https://www.siemers-grundbesitz.de/immobiliensuche"},
+    {"name": "Rosenhof", "url": "https://www.rosenhof-gmbh.de/"},
+    {"name": "Abteigrund (wohn-hh)", "url": "http://www.wohn-hh.de/"},
+    {"name": "Rebien", "url": "https://www.wobau-rebien.de/"},
+    {"name": "dhu", "url": "https://dhu.hamburg/wohnen/wohnungsangebote/"},
+    {"name": "Hamburger Wohnen", "url": "https://www.hamburgerwohnen.de/wohnen/wohnungssuche-home.html"},
+    {"name": "Wichern", "url": "https://wichernbau.de/vermietung/"},
+    {"name": "GG Elbe", "url": "https://www.gg-elbe.de/aktuelle-angebote/", "js": true},
+    {"name": "Groth & Schneider", "url": "https://www.grothschneider.de/aktuelle-angebote/"},
+    {"name": "Treuhand Hantke", "url": "https://treuhand-hantke.com/"}
+  ]
+}
