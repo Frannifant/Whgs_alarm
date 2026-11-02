@@ -13,15 +13,6 @@
       "require": "Hamburg",
       "exclude": "Leipzig|Dresden|Potsdam|Düsseldorf|Hannover|Berlin|Köln|Bremen"
     },
-
- {
-      "name": "Wentzel Dr.II",
-      "url": "https://wentzel-dr.de/immobilien?frymo_query=%7B%2268389%22:%7B%22search_string%22:%22hamburg%22,%22s_fields%22:%22title,external_id,zip_code,location,internal_id%22,%22marketing_type%22:%22218%22,%22price_to%22:%22800%22%7D%7D"
-    },
-    {
-      "name": "KAIFU-NORDLAND",
-      "url": "https://www.kaifu.de/wohnen/mietangebote/"
-    },
     {
       "name": "KAIFU-NORDLAND",
       "url": "https://www.kaifu.de/wohnen/mietangebote/"
@@ -33,11 +24,6 @@
     {
       "name": "Rosenhof",
       "url": "https://www.rosenhof-gmbh.de/",
-      "js": true
-    },
-    {
-      "name": "Rebien",
-      "url": "https://www.wobau-rebien.de/",
       "js": true
     },
     {
@@ -79,11 +65,6 @@
       "js": true
     },
     {
-      "name": "Heimstaden Hamburg",
-      "url": "https://heimstaden.com/de/immobiliensuche/wohnung-hamburg/",
-      "js": true
-    },
-    {
       "name": "Behrendt",
       "url": "https://behrendt.hamburg/kontakt/vermietung/"
     },
@@ -116,12 +97,10 @@
     },
     {
       "name": "BUWOG",
-      "url": "https://www.buwog-immobilientreuhand.de/immobilien?property_search[result_count_only]=true&property_search[marketing_type]=rent&property_search[property_type]=flat&property_search[minimum_total_size]=10&property_search[maximum_total_size]=50&property_search[minimum_rent_price]=291&property_search[maximum_rent_price]=791&property_search[zip_code]=22045,20099,22525,22523,20359,21035,22083,22117,22119,22303,22767"
-    },
-    {
-      "name": "Hamburg Team",
-      "url": "https://hamburgteam.de/property-management/mietangebote/",
-      "exclude": "\\b(Leipzig|Dresden|Berlin|Köln|München|Frankfurt|Düsseldorf|Hannover|Stuttgart|Potsdam)\\b"
+      "url": "https://www.buwog-immobilientreuhand.de/immobilien?property_search[result_count_only]=true&property_search[marketing_type]=rent&property_search[property_type]=flat&property_search[minimum_total_size]=10&property_search[maximum_total_size]=50&property_search[minimum_rent_price]=291&property_search[maximum_rent_price]=791&property_search[zip_code]=22045,20099,22525,22523,20359,21035,22083,22117,22119,22303,22767",
+      "extra_urls": [
+        "https://www.buwog-immobilientreuhand.de/immobilien?property_search[marketing_type]=rent&property_search[property_type]=flat&property_search[minimum_total_size]=10&property_search[maximum_total_size]=50&property_search[minimum_rent_price]=291&property_search[maximum_rent_price]=791&property_search[zip_code]=22045,20099,22525,22523,20359,21035,22083,22117,22119,22303,22767"
+      ]
     },
     {
       "name": "Berlinhaus",
@@ -147,6 +126,10 @@
       "name": "ohne-makler.net",
       "url": "https://www.ohne-makler.net/immobilien/wohnung-mieten/hamburg/hamburg/?area_max=64&price_max=722&sort=date_desc",
       "js": true
+    },
+    {
+      "name": "Nord-IMMO (Haspa)",
+      "url": "https://www.nord-immo.de/portfolio/mietangebote/"
     }
   ]
 }
