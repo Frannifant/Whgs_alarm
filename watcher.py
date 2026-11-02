@@ -140,6 +140,8 @@ def parse(text):
 
 def verdict(text):
     """Gibt (melden?, Preis-Info) zurück."""
+    if re.search(r"Kaufpreis|zum Kauf|Kapitalanlage|Baugrundst", text, re.I):
+        return False, ""
     warm, kalt, other, rooms = parse(text)
     if rooms is not None and rooms > MAX_ROOMS:
         return False, ""
@@ -164,7 +166,9 @@ def main():
     for site in CFG["sites"]:
         name = site["name"]
         try:
-            listings = extract_listings(fetch(site), site["url"])
+            listings = {}
+            for u in [site["url"]] + site.get("extra_urls", []):
+                listings.update(extract_listings(fetch({**site, "url": u}), u))
             errors[name] = 0
         except Exception as e:
             errors[name] = errors.get(name, 0) + 1
@@ -177,9 +181,20 @@ def main():
         new_keys = [k for k in listings if k not in known]
         status.append(("✅" if listings else "⚠️") + f" {name}: {len(listings)} Anzeigen erkannt")
 
-        if not first_run and name in seen:
+        sig = hashlib.md5(json.dumps([site["url"]] + site.get("extra_urls", [])).encode()).hexdigest()
+        sigs = state.setdefault("sig", {})
+        silent = first_run or name not in seen or sigs.get(name) != sig
+        sigs[name] = sig
+        req = re.compile(site["require"], re.I) if site.get("require") else None
+        exc = re.compile(site["exclude"], re.I) if site.get("exclude") else None
+
+        if not silent:
             for k in new_keys:
                 item = listings[k]
+                if req and not req.search(item["text"]):
+                    continue
+                if exc and exc.search(item["text"]):
+                    continue
                 ok, price = verdict(item["text"])
                 if not ok:
                     continue
@@ -197,7 +212,15 @@ def main():
     if first_run:
         tg("🤖 Wohnungs-Alarm gestartet. Bestehende Anzeigen gespeichert – ab jetzt melde ich nur NEUE.\n\n" + "\n".join(status))
     elif state.get("last_status_day") != today and now.hour >= 7:
-        tg(f"☀️ Tagesstatus ({now:%d.%m.})\n" + "\n".join(status))
+        ok = [s for s in status if s.startswith("✅")]
+        problems = [s for s in status if s.startswith("❌")]
+        empty = [s.split(":")[0][2:].strip() for s in status if s.startswith("⚠️")]
+        msg = f"☀️ Tagesstatus ({now:%d.%m.}): {len(ok)} von {len(status)} Seiten liefern Anzeigen."
+        if empty:
+            msg += "\nOhne Anzeigen: " + ", ".join(empty)
+        if problems:
+            msg += "\n" + "\n".join(problems)
+        tg(msg)
     if now.hour >= 7:
         state["last_status_day"] = today
 
