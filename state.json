@@ -2,10 +2,18 @@
  "seen": {
   "Wentzel Dr.": [
    "https://wentzel-dr.de/immobilie/modernisierte-2-zimmer-wohnung-zur-miete-in-leipzig/",
+   "https://wentzel-dr.de/immobilie/schoene-15-zimmerwohnung-zur-miete-in-barmbek-wentzel-dr/",
    "https://wentzel-dr.de/immobilie/gemuetliche-1-zimmerwohnung-zur-miete-in-hannover-wentzel-dr-2/",
+   "https://wentzel-dr.de/immobilie/charmante-3-zimmerwohnung-zur-miete-in-hamburg-gross-borstel-wentzel-dr/",
+   "https://wentzel-dr.de/immobilie/gepflegte-1-zimmerwohnung-zur-miete-in-hamburg-eimsbuettel-wentzel-dr/",
+   "https://wentzel-dr.de/immobilie/schoene-15-zimmerwohnung-zur-miete-in-hamburg-barmbek-wentzel-dr/",
+   "https://wentzel-dr.de/immobilie/schoene-singlewohnung-naehe-stadtpark-zur-miete-in-alsterdorf-wentzel-dr/",
+   "https://wentzel-dr.de/immobilie/ready-to-move-in-modernes-studentenapartment-in-hamburg-zur-miete-wentzel-dr/",
    "https://wentzel-dr.de/immobilie/moderne-3-zimmer-wohnung-zur-miete-in-leipzig-wentzel-dr/"
   ],
-  "KAIFU-NORDLAND": [],
+  "KAIFU-NORDLAND": [
+   "https://www.kaifu.app"
+  ],
   "Siemers Grundbesitz": [
    "https://www.siemers-grundbesitz.de/datenschutz"
   ],
@@ -16,27 +24,34 @@
   "Wichern": [],
   "GG Elbe": [],
   "Groth & Schneider": [
-   "https://www.grothschneider.de/objekt/?id=5701628",
-   "https://www.grothschneider.de/objekt/?id=5701418",
-   "https://www.grothschneider.de/objekt/?id=6185601",
-   "https://www.grothschneider.de/objekt/?id=5703640",
-   "https://www.grothschneider.de/objekt/?id=5700358",
-   "https://www.grothschneider.de/objekt/?id=5695764",
-   "https://www.grothschneider.de/objekt/?id=5702713",
    "https://www.grothschneider.de/objekt/?id=5702350",
    "https://www.grothschneider.de/objekt/?id=6289047",
-   "https://www.grothschneider.de/objekt/?id=5697491",
-   "https://www.grothschneider.de/objekt/?id=6246608",
-   "https://www.grothschneider.de/objekt/?id=AB6152FDF9A14414852FDCA67A148430",
-   "https://www.grothschneider.de/objekt/?id=5702125",
-   "https://www.grothschneider.de/objekt/?id=5702792",
    "https://www.grothschneider.de/objekt/?id=6265750",
-   "https://www.grothschneider.de/objekt/?id=28C1EC2FF2834A8A8D4C65AF2D2EAEF6"
+   "https://www.grothschneider.de/objekt/?id=6185601",
+   "https://www.grothschneider.de/objekt/?id=5700358",
+   "https://www.grothschneider.de/objekt/?id=5702713",
+   "https://www.grothschneider.de/objekt/?id=5701628",
+   "https://www.grothschneider.de/objekt/?id=5701418",
+   "https://www.grothschneider.de/objekt/?id=5695764",
+   "https://www.grothschneider.de/objekt/?id=5702125",
+   "https://www.grothschneider.de/objekt/?id=5697491",
+   "https://www.grothschneider.de/objekt/?id=AB6152FDF9A14414852FDCA67A148430",
+   "https://www.grothschneider.de/objekt/?id=28C1EC2FF2834A8A8D4C65AF2D2EAEF6",
+   "https://www.grothschneider.de/objekt/?id=5703640",
+   "https://www.grothschneider.de/objekt/?id=6246608",
+   "https://www.grothschneider.de/objekt/?id=5702792"
   ],
   "Treuhand Hantke": [
+   "https://treuhand-hantke.com/immobilie/altbausanierung/",
    "https://treuhand-hantke.com/immobilie/neue-bauvorhaben/",
-   "https://treuhand-hantke.com/immobilie/altbausanierung/"
-  ]
+   "https://treuhand-hantke.com/unsere-aktuellen-angebote-zur-wohnungsvermietung/"
+  ],
+  "altoba": [],
+  "HANSA": [],
+  "Heimstaden Hamburg": [],
+  "PrivatBau": [],
+  "Theo Urbach": [],
+  "Emil Planton": []
  },
  "errors": {
   "Wentzel Dr.": 0,
@@ -50,7 +65,33 @@
   "Wichern": 0,
   "GG Elbe": 0,
   "Groth & Schneider": 0,
-  "Treuhand Hantke": 0
+  "Treuhand Hantke": 0,
+  "altoba": 0,
+  "HANSA": 0,
+  "Heimstaden Hamburg": 0,
+  "Behrendt": 1,
+  "PrivatBau": 0,
+  "Theo Urbach": 0,
+  "Emil Planton": 0
  },
- "last_status_day": "2026-11-02"
+ "last_status_day": "2026-11-02",
+ "sig": {
+  "Wentzel Dr.": "74690a373bc91dfd34c226e03754c685",
+  "KAIFU-NORDLAND": "73f8e3df75795601225bca7a8a8dc779",
+  "Siemers Grundbesitz": "e075f123ed5ba2948dd9bcdcbf179438",
+  "Rosenhof": "eec046552f67e1595d98e2d8f5ba01da",
+  "Rebien": "c9fe607be2ee92ebe4da2d51275283b6",
+  "dhu": "c372327cfad86a28e2e7ab8bf9b45a33",
+  "Hamburger Wohnen": "427a5ee4b8cf9f8f857a3da6ca92b544",
+  "Wichern": "26413432ac0638178f866d3eecc5dede",
+  "GG Elbe": "d5c2e2a1e13804b5cd01c6bdea1ebd87",
+  "Groth & Schneider": "11aa3200f8a1ad33013147b8df8d4e31",
+  "Treuhand Hantke": "4b5d132bb9e4cf1e29e68cd95ca206ed",
+  "altoba": "18bd4980cb0861c4a3c464ae96e593bd",
+  "HANSA": "5b233ba47dedf4bc178c41b4208452f5",
+  "Heimstaden Hamburg": "7e3ff3bfb0ab577effd8ae095c9ca78a",
+  "PrivatBau": "dbcc6d75de8ad7fb366a2659eacd3141",
+  "Theo Urbach": "6a67a2419365bcd7f29f89d26dc07921",
+  "Emil Planton": "53e8dec77d11db61d5ef539e09546cd7"
+ }
 }
