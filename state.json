@@ -1,0 +1,55 @@
+{
+ "seen": {
+  "Wentzel Dr.": [
+   "https://wentzel-dr.de/immobilie/moderne-3-zimmer-wohnung-zur-miete-in-leipzig-wentzel-dr/",
+   "https://wentzel-dr.de/immobilie/modernisierte-2-zimmer-wohnung-zur-miete-in-leipzig/"
+  ],
+  "KAIFU-NORDLAND": [],
+  "Siemers Grundbesitz": [
+   "https://www.siemers-grundbesitz.de/datenschutz"
+  ],
+  "Rosenhof": [],
+  "Rebien": [],
+  "dhu": [],
+  "Hamburger Wohnen": [],
+  "Wichern": [],
+  "GG Elbe": [],
+  "Groth & Schneider": [
+   "https://www.grothschneider.de/objekt/?id=5697491",
+   "https://www.grothschneider.de/objekt/?id=5702125",
+   "https://www.grothschneider.de/objekt/?id=5702713",
+   "https://www.grothschneider.de/objekt/?id=5695764",
+   "https://www.grothschneider.de/objekt/?id=5702350",
+   "https://www.grothschneider.de/objekt/?id=6289047",
+   "https://www.grothschneider.de/objekt/?id=5700358",
+   "https://www.grothschneider.de/objekt/?id=5701418",
+   "https://www.grothschneider.de/objekt/?id=6185601",
+   "https://www.grothschneider.de/objekt/?id=AB6152FDF9A14414852FDCA67A148430",
+   "https://www.grothschneider.de/objekt/?id=5703640",
+   "https://www.grothschneider.de/objekt/?id=5701628",
+   "https://www.grothschneider.de/objekt/?id=6246608",
+   "https://www.grothschneider.de/objekt/?id=5702792",
+   "https://www.grothschneider.de/objekt/?id=28C1EC2FF2834A8A8D4C65AF2D2EAEF6",
+   "https://www.grothschneider.de/objekt/?id=6265750"
+  ],
+  "Treuhand Hantke": [
+   "https://treuhand-hantke.com/immobilie/neue-bauvorhaben/",
+   "https://treuhand-hantke.com/immobilie/altbausanierung/"
+  ]
+ },
+ "errors": {
+  "Wentzel Dr.": 0,
+  "KAIFU-NORDLAND": 0,
+  "Siemers Grundbesitz": 0,
+  "Rosenhof": 0,
+  "Abteigrund (wohn-hh)": 1,
+  "Rebien": 0,
+  "dhu": 0,
+  "Hamburger Wohnen": 0,
+  "Wichern": 0,
+  "GG Elbe": 0,
+  "Groth & Schneider": 0,
+  "Treuhand Hantke": 0
+ },
+ "last_status_day": "2026-11-02"
+}
